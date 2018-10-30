@@ -1,5 +1,6 @@
 #include <iostream>
 #include <vector>
+#include <algorithm>
 
 int main(int argc, char* argv[]) {
   int n, k;
@@ -14,9 +15,9 @@ int main(int argc, char* argv[]) {
     vec.push_back(j);
   }
 
-  sort(vec.begin(), vec.end());
+  std::sort(vec.begin(), vec.end());
 
-  std::vector<int>::iterator it = unique(vec.begin(), vec.end());
+  std::vector<int>::iterator it = std::unique(vec.begin(), vec.end());
   std::vector<int> no_dup_vec(vec.begin(), it);
 
   it = no_dup_vec.begin();
