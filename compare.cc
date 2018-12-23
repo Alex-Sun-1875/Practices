@@ -1,3 +1,4 @@
+// 比较两个 str
 #include <iostream>
 
 int main(int argc, char* argv[]) {
