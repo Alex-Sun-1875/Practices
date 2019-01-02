@@ -164,3 +164,63 @@ int main(int argc, char* argv[]) {
 
   return 0;
 }
+
+
+// 在一个字符串(0<=字符串长度<=10000，全部由字母组成)中找到第一个只出现一次的字符,并返回它的位置, 如果没有则返回 -1（需要区分大小写）
+#include <iostream>
+#include <string>
+#include <vector>
+
+int FirstNotRepeatingChar(std::string str) {
+  int len = str.size();
+  std::vector<std::pair<char, int>> val_count;
+  for (int i = 0; i < len; ++i) {
+    auto it = std::find_if(val_count.begin(), val_count.end(),
+                           [=](std::pair<char, int>& it) {return it.first == str[i];});
+    if (it != val_count.end()) {
+      it->second += 1;
+    } else {
+      val_count.push_back(std::pair<int, int>(str[i], 1));
+    }
+  }
+  for (auto v : val_count) {
+    if (1 == v.second)
+      return str.find(v.first);
+  }
+  return -1;
+}
+
+int main(int argc, char* argv[]) {
+  std::string str = "google";
+  int index = FirstNotRepeatingChar(str);
+  std::cout << "First Not Repeating Char index is: " << index << std::endl;
+  return 0;
+}
+
+
+// 在一个字符串(0<=字符串长度<=10000，全部由字母组成)中找到第一个只出现一次的字符,并返回它的位置, 如果没有则返回 -1（需要区分大小写）
+#include <iostream>
+#include <string>
+#include <vector>
+
+int InversePairs(std::vector<int> data) {
+        auto it_1 = data.begin();
+        std::vector<std::pair<int, int>> vec;
+        for (; it_1 < data.end() - 1; ++it_1) {
+            auto it_2 = it_1 + 1;
+            while (it_2 != data.end()) {
+                if (*it_1 > *it_2) {
+                    vec.push_back(std::pair<int, int>(*it_1, *it_2));
+                }
+                ++it_2;
+            }
+        }
+        return vec.size();
+    }
+
+int main(int argc, char* argv[]) {
+  std::vector<int> vec = {3, 2, 1};
+  int size = InversePairs(vec);
+  std::cout << "size = " << size << std::endl;
+  return 0;
+}

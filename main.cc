@@ -1,85 +1,53 @@
-#include <stdio.h>
-#include <stdlib.h>
 #include <iostream>
+#include <vector>
 
-typedef struct node {
-  int data;
-  node* left;
-  node* right;
-} Node, *pNode;
-
-void InsertNode(pNode* head, int data) {
-  if (NULL == *head) {
-    *head = new Node;
-    (*head)->data = data;
-    (*head)->left = NULL;
-    (*head)->right = NULL;
-  } else {
-    if (data <= (*head)->data) {
-      InsertNode(&(*head)->left, data);
-    } else {
-      InsertNode(&(*head)->right, data);
+class Solution {
+public:
+    bool hasPath(char* matrix, int rows, int cols, char* str)
+    {
+        if (nullptr == str || rows <= 0 || cols <= 0)
+            return false;
+        bool* flag = new bool[rows*cols]();
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++)
+                if (isHasPath(matrix, rows, cols, str, flag, i, j))
+                    return true;
+        }
+        return false;
     }
-  }
-}
 
-void PrintNode(pNode node) {
-  if (nullptr != node) {
-    std::cout << node->data << " ";
-  }
-}
+    bool isHasPath(char* matrix, int rows, int cols, char* str,
+                   bool* flag, int curx, int cury) {
+        if ('\0' == *str)
+            return true;
+        if (cury = cols) {
+            curx++;
+            cury = 0;
+        }
+        if (-1 == cury) {
+            curx--;
+            cury = cols - 1;
+        }
+        if (curx < 0 || curx >= rows)
+            return false;
+        if (flag[curx*cols+cury] || *str != matrix[curx*cols+cury])
+            return false;
+        flag[curx*cols+cury] = true;
+        bool sign = isHasPath(matrix, rows, cols, str+1, flag, curx-1, cury) ||
+                    isHasPath(matrix, rows, cols, str+1, flag, curx+1, cury) ||
+                    isHasPath(matrix, rows, cols, str+1, flag, curx, cury-1) ||
+                    isHasPath(matrix, rows, cols, str+1, flag, curx, cury+1);
+        flag[curx*cols+cury] = false;
+        return sign;
+    }
+};
 
-// 前序递归遍历
-void PreOrder(pNode root) {
-  if (nullptr != root) {
-    PrintNode(root);
-    PreOrder(root->left);
-    PreOrder(root->right);
-  }
-}
-
-void MiddleOrder(pNode root) {
-  if (nullptr != root) {
-    MiddleOrder(root->left);
-    PrintNode(root);
-    MiddleOrder(root->right);
-  }
-}
-
-void PostOrder(pNode root) {
-  if (nullptr != root) {
-    PostOrder(root->left);
-    PostOrder(root->right);
-    PrintNode(root);
-  }
-}
-
-pNode BuildTree() {
-  int data;
-  pNode head = NULL;
-  scanf("%d", &data);
-  while (0 != data) {
-    InsertNode(&head, data);
-    scanf("%d", &data);
-  }
-
-  return head;
-}
 
 int main(int argc, char* argv[]) {
-  pNode head;
-  std::cout << "请输入一串整数，以空格分开，0 表示输入结束:" << std::endl;
-  head = BuildTree();
-  std::cout << "前序遍历二叉树:" << std::endl;
-  PreOrder(head);
+  bool* flag = new bool[7];
+  for (int i = 0; i < 7; ++i) {
+    std::cout << flag[i] << " ";
+  }
   std::cout << std::endl;
-  std::cout << "中序遍历二叉树:" << std::endl;
-  MiddleOrder(head);
-  std::cout << std::endl;
-  std::cout << "后续遍历二叉树:" << std::endl;
-  PostOrder(head);
-  std::cout << std::endl;
-
   return 0;
 }
-
