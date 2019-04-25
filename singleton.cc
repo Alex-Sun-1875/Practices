@@ -12,7 +12,7 @@ class Singleton {
     static T* GetInstance();
 
   protected:
-    Singleton() = default;
+    Singleton();
     virtual ~Singleton();
     Singleton(const Singleton& other) = delete;
     Singleton& operator=(const Singleton& other) = delete;
@@ -29,6 +29,11 @@ template <typename T>
 T* Singleton<T>::instance_ = nullptr;
 
 template <typename T>
+Singleton<T>::Singleton() {
+  std::cout << "new a singleton instance!!!" << std::endl;
+}
+
+template <typename T>
 T* Singleton<T>::GetInstance() {
   if (nullptr == instance_) {
     pthread_mutex_lock(&mutex_);
@@ -43,5 +48,7 @@ T* Singleton<T>::GetInstance() {
 int main(int argc, char* argv[]) {
   std::string* str = Singleton<std::string>::GetInstance();
   std::cout << "str = " << *str << std::endl;
+  std::string* str_2 = Singleton<std::string>::GetInstance();
+  std::cout << "str_2 = " << *str_2 << std::endl;
   return 0;
 }
